@@ -106,7 +106,7 @@ namespace ITI.GameOfLife.Tests
             //const1.NodeType.Should().Be( ExpressionType.Constant );
             const1.Value.Should().Be( 4 );
 
-            
+
             BinaryExpression astAddition;
             ConstantExpression const2;
 
@@ -157,13 +157,16 @@ namespace ITI.GameOfLife.Tests
         {
             BinaryExpression stringExpr = (BinaryExpression) Game.AstStringOperator();
 
-            stringExpr.Left.NodeType.Should().Be(ExpressionType.Constant);
-            Expression.Lambda<Func<string>>(stringExpr.Left).Compile()().Should().Be("toto");
+            // stringExpr.Left.NodeType.Should().Be(ExpressionType.Constant);
+            // Expression.Lambda<Func<string>>(stringExpr.Left).Compile()().Should().Be("toto");
+            ((ConstantExpression)stringExpr.Left).Value.Should().Be( "toto" );
 
-            stringExpr.Right.NodeType.Should().Be(ExpressionType.Constant);
-            Expression.Lambda<Func<string>>(stringExpr.Right).Compile()().Should().Be("tata");
+            //stringExpr.Right.NodeType.Should().Be( ExpressionType.Constant );
+            //Expression.Lambda<Func<string>>( stringExpr.Right ).Compile()().Should().Be( "tata" );
+            ((ConstantExpression)stringExpr.Right).Value.Should().Be( "tata" );
 
-            Expression.Lambda<Func<string>>(Game.AstStringOperator()).Compile()().Should().Be("tototata");
+
+            Expression.Lambda<Func<string>>( Game.AstStringOperator() ).Compile()().Should().Be( "tototata" );
         }
 
     }
