@@ -19,10 +19,22 @@ namespace ITI.GameOfLife
         /// <summary>
         /// "toto" + "tata"
         /// </summary>
-        public static Expression AstStringOperator()
+        public static BinaryExpression AstStringOperator()
         {
             var addStringMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
             return Expression.Add( Expression.Constant( "toto" ), Expression.Constant( "tata" ), addStringMethod );
+        }
+
+        public static BinaryExpression AstStringAndDateTime()
+        {
+            var addStringMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
+            return Expression.Add(Expression.Constant("toto"), Expression.Constant((DateTime.UtcNow.Millisecond & 1) == 1 ? "You" : "Me"), addStringMethod);
+        }
+
+        public static Expression AstFunc()
+        {
+            Expression<Func<int, int, int>> expression = (x, y) => x * y;
+            return expression;
         }
 
         /// <summary>
