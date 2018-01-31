@@ -107,10 +107,7 @@ namespace ITI.GameOfLife.Tests
             //const1.NodeType.Should().Be( ExpressionType.Constant );
             const1.Value.Should().Be( 4 );
 
-            var result = Expression.Lambda<Func<int>>(ast).Compile()();
-
-            result.Should().Be(6);
-
+            
             BinaryExpression astAddition;
             ConstantExpression const2;
 
@@ -146,7 +143,13 @@ namespace ITI.GameOfLife.Tests
                 const4.Value.Should().Be( 3 );
                 const3.Value.Should().Be( 5 );
             }
-            
+
+
+
+            var result = Expression.Lambda<Func<int>>(ast).Compile()();
+
+            result.Should().Be( 6 );
+
 
         }
 
