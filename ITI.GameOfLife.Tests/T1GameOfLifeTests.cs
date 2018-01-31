@@ -155,19 +155,33 @@ namespace ITI.GameOfLife.Tests
         [Test]
         public void ast_play_with_string()
         {
-            BinaryExpression stringExpr = (BinaryExpression) Game.AstStringOperator();
+            BinaryExpression stringExpr = Game.AstStringOperator();
 
-            // stringExpr.Left.NodeType.Should().Be(ExpressionType.Constant);
-            // Expression.Lambda<Func<string>>(stringExpr.Left).Compile()().Should().Be("toto");
             ((ConstantExpression)stringExpr.Left).Value.Should().Be( "toto" );
-
-            //stringExpr.Right.NodeType.Should().Be( ExpressionType.Constant );
-            //Expression.Lambda<Func<string>>( stringExpr.Right ).Compile()().Should().Be( "tata" );
             ((ConstantExpression)stringExpr.Right).Value.Should().Be( "tata" );
-
 
             Expression.Lambda<Func<string>>( Game.AstStringOperator() ).Compile()().Should().Be( "tototata" );
         }
+
+        [Test]
+        public void ast_string_and_datetime()
+        {
+            Console.WriteLine(Expression.Lambda<Func<string>>(Game.AstStringAndDateTime()).Compile()());
+        }
+
+        [Test]
+        public void ast_usage_of_func()
+        {
+            Expression<Func<int, int, int>> expr = (Expression<Func<int, int, int>>) Game.AstFunc();
+
+            expr.NodeType.Should().Be(ExpressionType.Lambda);
+
+            expr.Parameters[0].NodeType.Should().Be(ExpressionType.Parameter);
+            expr.Parameters[1].NodeType.Should().Be(ExpressionType.Parameter);
+
+            expr.Compile()(3, 5).Should().Be(15);
+        }
+
 
     }
 }
