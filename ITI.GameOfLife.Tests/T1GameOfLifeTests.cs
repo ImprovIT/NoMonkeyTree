@@ -169,5 +169,11 @@ namespace ITI.GameOfLife.Tests
             Expression.Lambda<Func<string>>( Game.AstStringOperator() ).Compile()().Should().Be( "tototata" );
         }
 
+        [Test]
+        public void ast_full_explicit_string_representation_of_simple_operation()
+        {
+            var a = Game.AstFullExplicitStringRepresentation();
+            Console.WriteLine( a );
+        }
     }
 }

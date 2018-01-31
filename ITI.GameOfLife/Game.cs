@@ -13,7 +13,7 @@ namespace ITI.GameOfLife
         {
             var a = Expression.Add(Expression.Constant(3), Expression.Constant(5));
             var b = Expression.Multiply(Expression.Constant(3), a);
-            return Expression.Divide(b, Expression.Constant(4));
+            return Expression.Divide( b, Expression.Constant( 4 ) );
         }
 
         /// <summary>
@@ -22,8 +22,26 @@ namespace ITI.GameOfLife
         public static Expression AstStringOperator()
         {
             var addStringMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
-            return Expression.Add(Expression.Constant("toto"), Expression.Constant("tata"), addStringMethod);
+            return Expression.Add( Expression.Constant( "toto" ), Expression.Constant( "tata" ), addStringMethod );
         }
+
+        /// <summary>
+        /// ( 3 + 5 ) * 3 / 4 => ( ( ( (3) + (5) ) * (3) ) / (4) )
+        /// </summary>
+        public static string AstFullExplicitStringRepresentation()
+        {
+            var expr = Expression.Divide(
+                Expression.Multiply(
+                    Expression.Constant( 3 ),
+                    Expression.Add( Expression.Constant( 3 ),
+                    Expression.Constant( 5 ) ) ),
+                Expression.Constant( 4 ) );
+            var a = new MyVisitor();
+            a.Visit( expr );
+
+            return expr.ToString();
+        }
+
 
         /*
         public Expression AstAddition(int a, int b)
@@ -83,5 +101,40 @@ namespace ITI.GameOfLife
             return Expression.Constant(sb);
         }
     */
+
+    }
+
+    public class MyVisitor : ExpressionVisitor
+    {
+        protected override Expression VisitBinary( BinaryExpression node )
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var leftNode = this.Visit(node.Left);
+
+
+            switch( node.NodeType )
+            {
+                case ExpressionType.Constant:
+                    sb.Append( "(" + node.ToString() + ")" );
+                    break;
+                case ExpressionType.Add:
+                    sb.Append( "(" + node.ToString() + ")" );
+                    break;
+                case ExpressionType.Subtract:
+                    sb.Append( leftNode );
+
+                    break;
+
+            }
+
+
+            var rightNode = this.Visit(node.Right);
+
+
+            Console.WriteLine( sb );
+
+            return Expression.Constant( sb );
+        }
     }
 }
