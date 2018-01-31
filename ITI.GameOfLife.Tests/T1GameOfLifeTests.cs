@@ -1,8 +1,7 @@
-﻿using System;
+﻿using FluentAssertions;
 using NUnit.Framework;
-using FluentAssertions;
+using System;
 using System.Linq.Expressions;
-using System.Xml;
 
 namespace ITI.GameOfLife.Tests
 {
@@ -151,6 +150,20 @@ namespace ITI.GameOfLife.Tests
             result.Should().Be( 6 );
 
 
+        }
+
+        [Test]
+        public void ast_play_with_string()
+        {
+            BinaryExpression stringExpr = (BinaryExpression) Game.AstStringOperator();
+
+            stringExpr.Left.NodeType.Should().Be(ExpressionType.Constant);
+            Expression.Lambda<Func<string>>(stringExpr.Left).Compile()().Should().Be("toto");
+
+            stringExpr.Right.NodeType.Should().Be(ExpressionType.Constant);
+            Expression.Lambda<Func<string>>(stringExpr.Right).Compile()().Should().Be("tata");
+
+            Expression.Lambda<Func<string>>(Game.AstStringOperator()).Compile()().Should().Be("tototata");
         }
 
     }

@@ -15,6 +15,16 @@ namespace ITI.GameOfLife
             var b = Expression.Multiply(Expression.Constant(3), a);
             return Expression.Divide(b, Expression.Constant(4));
         }
+
+        /// <summary>
+        /// "toto" + "tata"
+        /// </summary>
+        public static Expression AstStringOperator()
+        {
+            var addStringMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
+            return Expression.Add(Expression.Constant("toto"), Expression.Constant("tata"), addStringMethod);
+        }
+
         /*
         public Expression AstAddition(int a, int b)
         {
