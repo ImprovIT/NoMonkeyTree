@@ -10,9 +10,9 @@ namespace ITI.GameOfLife.Tests
     class MyExpressionVisitor : ExpressionVisitor
     {
 
-        protected override Expression VisitBinary(BinaryExpression node)
+        protected override Expression VisitBinary( BinaryExpression node )
         {
-            Console.WriteLine("Visit Binary");
+            Console.WriteLine( "Visit Binary" );
             return node;
         }
     }
@@ -34,7 +34,7 @@ namespace ITI.GameOfLife.Tests
             var visitor = new MyExpressionVisitor();
             //visitor.VisitBinary
 
-            Console.WriteLine(visitor.Visit(sumExpr2));
+            Console.WriteLine( visitor.Visit( sumExpr2 ) );
 
 
             //Console.WriteLine(sumExpr.ToString());
@@ -82,31 +82,68 @@ namespace ITI.GameOfLife.Tests
         }
 
         [Test]
-        public void ast_simple_operator_works()
+        public void ast_simple_operator_should_works()
         {
             BinaryExpression ast = Game.AstSimpleOperator();
 
 
-            ast.NodeType.Should().Be(ExpressionType.Divide);
+            ast.NodeType.Should().Be( ExpressionType.Divide );
 
             BinaryExpression astMultiply;
-            Expression const1;
+            ConstantExpression const1;
 
-            if (ast.Left.NodeType == ExpressionType.Multiply)
+            if( ast.Left.NodeType == ExpressionType.Multiply )
             {
                 astMultiply = (BinaryExpression)ast.Left;
-                const1 = ast.Right;     
+                const1 = (ConstantExpression)ast.Right;
             }
             else
             {
-                astMultiply = (BinaryExpression) ast.Right;
-                const1 = ast.Left;
+                astMultiply = (BinaryExpression)ast.Right;
+                const1 = (ConstantExpression)ast.Left;
             }
 
-            astMultiply.NodeType.Should().Be(ExpressionType.Multiply);
-            const1.NodeType.Should().Be(ExpressionType.Constant);
-            const1.ToString().Should().Be("4");
+            astMultiply.NodeType.Should().Be( ExpressionType.Multiply );
+            //const1.NodeType.Should().Be( ExpressionType.Constant );
+            const1.Value.Should().Be( 4 );
 
+
+            BinaryExpression astAddition;
+            ConstantExpression const2;
+
+            if( astMultiply.Left.NodeType == ExpressionType.Add )
+            {
+                astAddition = (BinaryExpression)astMultiply.Left;
+                const2 = (ConstantExpression)astMultiply.Right;
+            }
+            else
+            {
+                astAddition = (BinaryExpression)astMultiply.Right;
+                const2 = (ConstantExpression)astMultiply.Left;
+            }
+
+            astAddition.NodeType.Should().Be( ExpressionType.Add );
+            //const2.NodeType.Should().Be( ExpressionType.Constant );
+
+
+            const2.Value.Should().Be( 3 );
+
+
+            ConstantExpression const3 = (ConstantExpression)astAddition.Left;
+            ConstantExpression const4 = (ConstantExpression)astAddition.Right;
+            const3.NodeType.Should().Be( ExpressionType.Constant );
+            const4.NodeType.Should().Be( ExpressionType.Constant );
+
+            if( (int)const3.Value == 3 )
+            {
+                const4.Value.Should().Be( 5 );
+            }
+            else
+            {
+                const4.Value.Should().Be( 3 );
+                const3.Value.Should().Be( 5 );
+            }
+            
 
         }
 
