@@ -186,8 +186,20 @@ namespace ITI.GameOfLife.Tests
         [Test]
         public void ast_full_explicit_string_representation_of_simple_operation()
         {
-            var a = Game.AstFullExplicitStringRepresentation();
-            Console.WriteLine( a );
+            // ( 3 + 5 ) * 3 / 4 =>  ( ( ( (3) + (5) ) * (3) ) / (4) )
+
+            var expr = Expression.Divide(
+                Expression.Multiply(
+                    Expression.Add( Expression.Constant( 3 ),
+                    Expression.Constant( 5 ) ),
+                    Expression.Constant( 3 ) ),
+                Expression.Constant( 4 ) );
+            var visitor = new VisitorParenthesis1();
+            visitor.Visit( expr );
+            var result = visitor.GetResult();
+
+            result.Should().Be( "( ( ( (3) + (5) ) * (3) ) / (4) )" );
+            Console.WriteLine( result );
         }
     }
 }

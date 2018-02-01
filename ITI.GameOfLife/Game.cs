@@ -28,7 +28,7 @@ namespace ITI.GameOfLife
         public static BinaryExpression AstStringAndDateTime()
         {
             var addStringMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
-            return Expression.Add(Expression.Constant("toto"), Expression.Constant((DateTime.UtcNow.Millisecond & 1) == 1 ? "You" : "Me"), addStringMethod);
+            return Expression.Add( Expression.Constant( "toto" ), Expression.Constant( (DateTime.UtcNow.Millisecond & 1) == 1 ? "You" : "Me" ), addStringMethod );
         }
 
         public static Expression AstFunc()
@@ -37,116 +37,57 @@ namespace ITI.GameOfLife
             return expression;
         }
 
-        /// <summary>
-        /// ( 3 + 5 ) * 3 / 4 => ( ( ( (3) + (5) ) * (3) ) / (4) )
-        /// </summary>
-        public static string AstFullExplicitStringRepresentation()
-        {
-            var expr = Expression.Divide(
-                Expression.Multiply(
-                    Expression.Constant( 3 ),
-                    Expression.Add( Expression.Constant( 3 ),
-                    Expression.Constant( 5 ) ) ),
-                Expression.Constant( 4 ) );
-            var a = new MyVisitor();
-            a.Visit( expr );
-
-            return expr.ToString();
-        }
-
-
-        /*
-        public Expression AstAddition(int a, int b)
-        {
-            return Expression.Add(Expression.Constant(a), Expression.Constant(b));
-        }
-
-        public void CreateCharacter(string Name, int hp)
-        {
-
-        }
-
-        public Expression Damaged(int charHp, int hp)
-        {
-            return Expression.Subtract(Expression.Constant(charHp), Expression.Constant(hp));
-        }
-
-        public Expression Healed(int charHp, int hp)
-        {
-            return Expression.Add(Expression.Constant(charHp), Expression.Constant(hp));
-        }
-
-    }
-    public class RpgExpressionVisitor : ExpressionVisitor
-    {
-
-        protected override Expression VisitBinary(BinaryExpression node)
-        {
-
-            StringBuilder sb = new StringBuilder();
-            // base hp
-            var leftNode = this.Visit(node.Left);
-
-            // hp modificator
-            switch (node.NodeType)
-            {
-                case ExpressionType.Add:
-                    sb.Append(leftNode);
-                    sb.Append(" healed ");
-                    //Console.Write(" healed ");
-                    break;
-                case ExpressionType.Subtract:
-                    sb.Append(leftNode);
-                    sb.Append(" damaged ");
-                    //Console.Write(leftNode.ToString());
-                    //Console.Write(" damaged ");
-                    break;
-
-            }
-
-            // quantity of hp affected
-            var rightNode = this.Visit(node.Right);
-            sb.Append(rightNode);
-            //Console.Write(rightNode.ToString());
-            //Console.WriteLine(" HP.");
-
-            return Expression.Constant(sb);
-        }
-    */
-
     }
 
-    public class MyVisitor : ExpressionVisitor
+    /// <summary>
+    ///( 3 + 5 ) * 3 / 4 =>  ( ( ( (3) + (5) ) * (3) ) / (4) )
+    /// </summary>
+    public class VisitorParenthesis1 : ExpressionVisitor
     {
+        StringBuilder _sb;
+
+        public VisitorParenthesis1()
+        {
+            _sb = new StringBuilder();
+        }
+
+        public string GetResult() => _sb.ToString();
+
         protected override Expression VisitBinary( BinaryExpression node )
         {
-            StringBuilder sb = new StringBuilder();
-
+            _sb.Append( "( " );
             var leftNode = this.Visit(node.Left);
 
 
             switch( node.NodeType )
             {
-                case ExpressionType.Constant:
-                    sb.Append( "(" + node.ToString() + ")" );
-                    break;
                 case ExpressionType.Add:
-                    sb.Append( "(" + node.ToString() + ")" );
+                    _sb.Append( " + " );
                     break;
                 case ExpressionType.Subtract:
-                    sb.Append( leftNode );
-
+                    _sb.Append( " - " );
                     break;
-
+                case ExpressionType.Multiply:
+                    _sb.Append( " * " );
+                    break;
+                case ExpressionType.Divide:
+                    _sb.Append( " / " );
+                    break;
             }
 
 
             var rightNode = this.Visit(node.Right);
 
+            _sb.Append( " )" );
+            return node;
+        }
 
-            Console.WriteLine( sb );
-
-            return Expression.Constant( sb );
+        protected override Expression VisitConstant( ConstantExpression node )
+        {
+            _sb.Append( "(" + node.Value + ")" );
+            return node;
         }
     }
+
+
 }
