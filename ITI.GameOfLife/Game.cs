@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -13,7 +14,7 @@ namespace ITI.GameOfLife
         {
             var a = Expression.Add(Expression.Constant(3), Expression.Constant(5));
             var b = Expression.Multiply(Expression.Constant(3), a);
-            return Expression.Divide( b, Expression.Constant( 4 ) );
+            return Expression.Divide(b, Expression.Constant(4));
         }
 
         /// <summary>
@@ -21,14 +22,15 @@ namespace ITI.GameOfLife
         /// </summary>
         public static BinaryExpression AstStringOperator()
         {
-            var addStringMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
-            return Expression.Add( Expression.Constant( "toto" ), Expression.Constant( "tata" ), addStringMethod );
+            var addStringMethod = typeof(string).GetMethod("Concat", new[] {typeof(string), typeof(string)});
+            return Expression.Add(Expression.Constant("toto"), Expression.Constant("tata"), addStringMethod);
         }
 
         public static BinaryExpression AstStringAndDateTime()
         {
-            var addStringMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
-            return Expression.Add( Expression.Constant( "toto" ), Expression.Constant( (DateTime.UtcNow.Millisecond & 1) == 1 ? "You" : "Me" ), addStringMethod );
+            var addStringMethod = typeof(string).GetMethod("Concat", new[] {typeof(string), typeof(string)});
+            return Expression.Add(Expression.Constant("toto"),
+                Expression.Constant((DateTime.UtcNow.Millisecond & 1) == 1 ? "You" : "Me"), addStringMethod);
         }
 
         public static Expression AstFunc()
@@ -37,202 +39,229 @@ namespace ITI.GameOfLife
             return expression;
         }
 
-    }
-
-    /// <summary>
-    ///( 3 + 5 ) * 3 / 4 =>  ( ( ( (3) + (5) ) * (3) ) / (4) )
-    /// </summary>
-    public class VisitorParenthesis1 : ExpressionVisitor
-    {
-        StringBuilder _sb;
-
-        public VisitorParenthesis1()
+        public static Expression ReversePolishNotationPrinciple()
         {
-            _sb = new StringBuilder();
+            Expression<Func<Expression, string>> expression = (reversePolishNotation) => "test";
+            return expression;
         }
 
-        public string GetResult() => _sb.ToString();
-
-        protected override Expression VisitBinary( BinaryExpression node )
+        public static Expression CalculSimpleReversePolishNotation()
         {
-            _sb.Append( "( " );
-            var leftNode = this.Visit(node.Left);
+            Expression<Func<Queue, int>> expression = (reversePolishNotation) => TestCalcul(reversePolishNotation);
+            return expression;
+        }
 
+        public static int TestCalcul(Queue reversePolishNotation)
+        {
+            Console.WriteLine(reversePolishNotation);
+            return reversePolishNotation.Count;
+        }
 
-            switch( node.NodeType )
+        /*
+        public Expression AstAddition(int a, int b)
+        {
+            return Expression.Add(Expression.Constant(a), Expression.Constant(b));
+        }
+
+        public void CreateCharacter(string Name, int hp)
+        {
+
+        }*/
+
+        /// <summary>
+        ///( 3 + 5 ) * 3 / 4 =>  ( ( ( (3) + (5) ) * (3) ) / (4) )
+        /// </summary>
+        public class VisitorParenthesis1 : ExpressionVisitor
+        {
+            readonly StringBuilder _sb;
+            public VisitorParenthesis1()
             {
-                case ExpressionType.Add:
-                    _sb.Append( " + " );
-                    break;
-                case ExpressionType.Subtract:
-                    _sb.Append( " - " );
-                    break;
-                case ExpressionType.Multiply:
-                    _sb.Append( " * " );
-                    break;
-                case ExpressionType.Divide:
-                    _sb.Append( " / " );
-                    break;
-                case ExpressionType.Modulo:
-                    _sb.Append( " % " );
-                    break;
-                default:
-                    _sb.Append( " ? " );
-                    break;
+                _sb = new StringBuilder();
             }
+
+            public string GetResult() => _sb.ToString();
+
+            protected override Expression VisitBinary(BinaryExpression node)
+            {
+                _sb.Append("( ");
+                var leftNode = this.Visit(node.Left);
+
+
+                switch (node.NodeType)
+                {
+                    case ExpressionType.Add:
+                        _sb.Append(" + ");
+                        break;
+                    case ExpressionType.Subtract:
+                        _sb.Append(" - ");
+                        break;
+                    case ExpressionType.Multiply:
+                        _sb.Append(" * ");
+                        break;
+                    case ExpressionType.Divide:
+                        _sb.Append(" / ");
+                        break;
+                    case ExpressionType.Modulo:
+                        _sb.Append(" % ");
+                        break;
+                    default:
+                        _sb.Append(" ? ");
+                        break;
+                }
 
 
             var rightNode = this.Visit(node.Right);
 
-            _sb.Append( " )" );
-            return node;
-        }
-
-        protected override Expression VisitConstant( ConstantExpression node )
-        {
-            _sb.Append( "(" + node.Value + ")" );
-            return node;
-        }
-    }
-
-    /// <summary>
-    /// ( 3 + 5 ) * 3 / 4 =>  ( ( ( 3 + 5 ) * 3 ) / 4 )
-    /// </summary>
-    public class VisitorParenthesis2 : ExpressionVisitor
-    {
-        StringBuilder _sb;
-
-        public VisitorParenthesis2()
-        {
-            _sb = new StringBuilder();
-        }
-
-        public string GetResult() => _sb.ToString();
-
-        protected override Expression VisitBinary( BinaryExpression node )
-        {
-            _sb.Append( "( " );
-            var leftNode = this.Visit(node.Left);
-
-
-            switch( node.NodeType )
-            {
-                case ExpressionType.Add:
-                    _sb.Append( " + " );
-                    break;
-                case ExpressionType.Subtract:
-                    _sb.Append( " - " );
-                    break;
-                case ExpressionType.Multiply:
-                    _sb.Append( " * " );
-                    break;
-                case ExpressionType.Divide:
-                    _sb.Append( " / " );
-                    break;
-                case ExpressionType.Modulo:
-                    _sb.Append( " % " );
-                    break;
-                default:
-                    _sb.Append( " ? " );
-                    break;
+                _sb.Append(" )");
+                return node;
             }
 
-
-            var rightNode = this.Visit(node.Right);
-
-            _sb.Append( " )" );
-            return node;
-        }
-
-        protected override Expression VisitConstant( ConstantExpression node )
-        {
-            _sb.Append( node.Value );
-            return node;
-        }
-    }
-
-
-    /// <summary>
-    /// ( 3 + 5 ) * 3 / 4 => ( 3 + 5 ) * 3 / 4
-    /// </summary>
-    public class VisitorParenthesis3 : ExpressionVisitor
-    {
-        StringBuilder _sb;
-
-        public VisitorParenthesis3()
-        {
-            _sb = new StringBuilder();
-        }
-
-        public string GetResult() => _sb.ToString();
-
-        protected override Expression VisitBinary( BinaryExpression node )
-        {
-            bool priorOp;
-            //TODO: Remove parenthesis from multiple non prior operations
-            switch( node.NodeType )
+            protected override Expression VisitConstant(ConstantExpression node)
             {
-                case ExpressionType.Add:
-                    priorOp = false;
-                    break;
-                case ExpressionType.Subtract:
-                    priorOp = false;
-                    break;
-                case ExpressionType.Multiply:
-                    priorOp = true;
-                    break;
-                case ExpressionType.Divide:
-                    priorOp = true;
-                    break;
-                case ExpressionType.Modulo:
-                    priorOp = true;
-                    break;
-                default:
-                    priorOp = false;
-                    break;
+                _sb.Append("(" + node.Value + ")");
+                return node;
+            }
+        }
+
+        /// <summary>
+        /// ( 3 + 5 ) * 3 / 4 =>  ( ( ( 3 + 5 ) * 3 ) / 4 )
+        /// </summary>
+        public class VisitorParenthesis2 : ExpressionVisitor
+        {
+            readonly StringBuilder _sb;
+
+            public VisitorParenthesis2()
+            {
+                _sb = new StringBuilder();
             }
 
-            if (!priorOp)
-            _sb.Append( "( " );
-           
-            var leftNode = this.Visit(node.Left);
+            public string GetResult() => _sb.ToString();
 
-
-            switch( node.NodeType )
+            protected override Expression VisitBinary(BinaryExpression node)
             {
-                case ExpressionType.Add:
-                    _sb.Append( " + " );
-                    break;
-                case ExpressionType.Subtract:
-                    _sb.Append( " - " );
-                    break;
-                case ExpressionType.Multiply:
-                    _sb.Append( " * " );
-                    break;
-                case ExpressionType.Divide:
-                    _sb.Append( " / " );
-                    break;
-                case ExpressionType.Modulo:
-                    _sb.Append( " % " );
-                    break;
-                default:
-                    _sb.Append( " ? " );
-                    break;
+                _sb.Append("( ");
+                var leftNode = this.Visit(node.Left);
+
+
+                switch (node.NodeType)
+                {
+                    case ExpressionType.Add:
+                        _sb.Append(" + ");
+                        break;
+                    case ExpressionType.Subtract:
+                        _sb.Append(" - ");
+                        break;
+                    case ExpressionType.Multiply:
+                        _sb.Append(" * ");
+                        break;
+                    case ExpressionType.Divide:
+                        _sb.Append(" / ");
+                        break;
+                    case ExpressionType.Modulo:
+                        _sb.Append(" % ");
+                        break;
+                    default:
+                        _sb.Append(" ? ");
+                        break;
+                }
+
+
+                var rightNode = this.Visit(node.Right);
+
+                _sb.Append(" )");
+                return node;
             }
 
-
-            var rightNode = this.Visit(node.Right);
-
-            if(!priorOp)
-            _sb.Append( " )" );
-
-            return node;
+            protected override Expression VisitConstant(ConstantExpression node)
+            {
+                _sb.Append(node.Value);
+                return node;
+            }
         }
 
-        protected override Expression VisitConstant( ConstantExpression node )
+
+        /// <summary>
+        /// ( 3 + 5 ) * 3 / 4 => ( 3 + 5 ) * 3 / 4
+        /// </summary>
+        public class VisitorParenthesis3 : ExpressionVisitor
         {
-            _sb.Append( node.Value );
-            return node;
+            readonly StringBuilder _sb;
+
+            public VisitorParenthesis3()
+            {
+                _sb = new StringBuilder();
+            }
+
+            public string GetResult() => _sb.ToString();
+
+            protected override Expression VisitBinary(BinaryExpression node)
+            {
+                bool priorOp;
+                //TODO: Remove parenthesis from multiple non prior operations
+                switch (node.NodeType)
+                {
+                    case ExpressionType.Add:
+                        priorOp = false;
+                        break;
+                    case ExpressionType.Subtract:
+                        priorOp = false;
+                        break;
+                    case ExpressionType.Multiply:
+                        priorOp = true;
+                        break;
+                    case ExpressionType.Divide:
+                        priorOp = true;
+                        break;
+                    case ExpressionType.Modulo:
+                        priorOp = true;
+                        break;
+                    default:
+                        priorOp = false;
+                        break;
+                }
+
+                if (!priorOp)
+                    _sb.Append("( ");
+
+                var leftNode = this.Visit(node.Left);
+
+
+                switch (node.NodeType)
+                {
+                    case ExpressionType.Add:
+                        _sb.Append(" + ");
+                        break;
+                    case ExpressionType.Subtract:
+                        _sb.Append(" - ");
+                        break;
+                    case ExpressionType.Multiply:
+                        _sb.Append(" * ");
+                        break;
+                    case ExpressionType.Divide:
+                        _sb.Append(" / ");
+                        break;
+                    case ExpressionType.Modulo:
+                        _sb.Append(" % ");
+                        break;
+                    default:
+                        _sb.Append(" ? ");
+                        break;
+                }
+
+
+                var rightNode = this.Visit(node.Right);
+
+                if (!priorOp)
+                    _sb.Append(" )");
+
+                return node;
+            }
+
+            protected override Expression VisitConstant(ConstantExpression node)
+            {
+                _sb.Append(node.Value);
+                return node;
+            }
         }
     }
 }
