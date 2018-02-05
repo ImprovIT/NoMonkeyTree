@@ -22,7 +22,7 @@ namespace ITI.GameOfLife.Tests
 
 
     [TestFixture]
-    public class T1GameOfLifeTests
+    public class T1NoMonkeyTreeTests
     {
         [Test]
         public void ast_simple_operator_should_works()
