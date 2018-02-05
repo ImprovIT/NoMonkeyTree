@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
 
-namespace ITI.GameOfLife.Tests
+namespace ITI.NoMonkeyTree.Tests
 {
 
     class MyExpressionVisitor : ExpressionVisitor
@@ -22,7 +22,7 @@ namespace ITI.GameOfLife.Tests
 
 
     [TestFixture]
-    public class T1GameOfLifeTests
+    public class T1NoMonkeyTreeTests
     {
         [Test]
         public void ast_simple_operator_should_works()

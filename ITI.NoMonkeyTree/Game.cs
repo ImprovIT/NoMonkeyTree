@@ -3,7 +3,7 @@ using System.Collections;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace ITI.GameOfLife
+namespace ITI.NoMonkeyTree
 {
     public static class Game
     {

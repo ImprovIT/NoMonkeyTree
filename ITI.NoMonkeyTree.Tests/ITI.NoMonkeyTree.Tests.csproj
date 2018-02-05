@@ -78,12 +78,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="T1GameOfLifeTests.cs" />
+    <Compile Include="T1NoMonkeyTreeTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITI.GameOfLife\ITI.GameOfLife.csproj">
+    <ProjectReference Include="..\ITI.NoMonkeyTree\ITI.NoMonkeyTree.csproj">
       <Project>{FEF0ACCF-A297-4E2B-A03D-33B67809F219}</Project>
-      <Name>ITI.GameOfLife</Name>
+      <Name>ITI.NoMonkeyTree</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
