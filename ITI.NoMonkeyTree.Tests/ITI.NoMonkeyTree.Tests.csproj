@@ -81,7 +81,7 @@
     <Compile Include="T1NoMonkeyTreeTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITI.GameOfLife\ITI.NoMonkeyTree.csproj">
+    <ProjectReference Include="..\ITI.NoMonkeyTree\ITI.NoMonkeyTree.csproj">
       <Project>{FEF0ACCF-A297-4E2B-A03D-33B67809F219}</Project>
       <Name>ITI.NoMonkeyTree</Name>
     </ProjectReference>

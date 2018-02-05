@@ -1,11 +1,11 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITI.NoMonkeyTree", "ITI.GameOfLife\ITI.NoMonkeyTree.csproj", "{FEF0ACCF-A297-4E2B-A03D-33B67809F219}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITI.NoMonkeyTree", "ITI.NoMonkeyTree\ITI.NoMonkeyTree.csproj", "{FEF0ACCF-A297-4E2B-A03D-33B67809F219}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITI.NoMonkeyTree.Tests", "ITI.GameOfLife.Tests\ITI.NoMonkeyTree.Tests.csproj", "{9F1863D5-A50A-4635-A467-310C5B2725B5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITI.NoMonkeyTree.Tests", "ITI.NoMonkeyTree.Tests\ITI.NoMonkeyTree.Tests.csproj", "{9F1863D5-A50A-4635-A467-310C5B2725B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,8 +24,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {92918D0D-A2B8-40FC-857F-9D483C1023A5}
 	EndGlobalSection
 EndGlobal
