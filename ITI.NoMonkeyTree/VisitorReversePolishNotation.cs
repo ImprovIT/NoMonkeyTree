@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ITI.GameOfLife
+namespace ITI.NoMonkeyTree
 {
     public class VisitorReversePolishNotation : ExpressionVisitor
     {
