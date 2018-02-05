@@ -39,12 +39,6 @@ namespace ITI.GameOfLife
             return expression;
         }
 
-        public static Expression ReversePolishNotationPrinciple()
-        {
-            Expression<Func<Expression, string>> expression = (reversePolishNotation) => "test";
-            return expression;
-        }
-
         public static Expression CalculSimpleReversePolishNotation()
         {
             Expression<Func<Queue, int>> expression = (reversePolishNotation) => TestCalcul(reversePolishNotation);

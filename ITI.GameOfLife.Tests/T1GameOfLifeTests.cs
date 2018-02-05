@@ -2,6 +2,8 @@
 using NUnit.Framework;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
 
@@ -130,28 +132,36 @@ namespace ITI.GameOfLife.Tests
         [Test]
         public void ast_reverse_polish_notation_principle()
         {
-            Expression expr = createE1(new Random());
-            
-            Console.WriteLine(Expression.Lambda<Func<int>>(expr).Compile()());
+            List<int> constValue = new List<int>();
+            Expression expr = CreateE1(new Random(), constValue);
 
+            var visitor = new VisitorReversePolishNotation();
+            visitor.Visit(expr);
+            string result = visitor.GetResult().Trim();
 
-            //Expression<Func<Expression, string>> expression = (Expression<Func<Expression, string>>)Game.ReversePolishNotationPrinciple();
-            //expression.NodeType.Should().Be(ExpressionType.Lambda);
+            //Console.WriteLine(result);
+            //Console.WriteLine("C1 C2 C3 + +"
+            //    .Replace("C1", constValue.ElementAt(0).ToString())
+            //    .Replace("C2", constValue.ElementAt(1).ToString())
+            //    .Replace("C3", constValue.ElementAt(2).ToString())
+            //);
 
-            //expression.Parameters[0].NodeType.Should().Be(ExpressionType.Parameter);
-
-            //var a = Expression.Add(Expression.Constant(3), Expression.Constant(5));
-            //var b = Expression.Multiply(Expression.Constant(3), a);
-
-            //Console.WriteLine(expression.Compile()(b));
-
+            result.Should().Be("C1 C2 C3 + +"
+                .Replace("C1", constValue.ElementAt(0).ToString())
+                .Replace("C2", constValue.ElementAt(1).ToString())
+                .Replace("C3", constValue.ElementAt(2).ToString())
+            );
         }
 
-        public Expression createE1(Random r)
+        public Expression CreateE1(Random r, List<int> constValue)
         {
-            int const1 = new Random().Next(Int32.MinValue, Int32.MaxValue);
-            int const2 = new Random().Next(Int32.MinValue, Int32.MaxValue);
-            int const3 = new Random().Next(Int32.MinValue, Int32.MaxValue);
+            int const1 = r.Next(Int32.MinValue, Int32.MaxValue);
+            int const2 = r.Next(Int32.MinValue, Int32.MaxValue);
+            int const3 = r.Next(Int32.MinValue, Int32.MaxValue);
+
+            constValue.Add(const1);
+            constValue.Add(const2);
+            constValue.Add(const3);
 
             var a = Expression.Add(Expression.Constant(const2), Expression.Constant(const3));
             return Expression.Add(Expression.Constant(const1), a);
