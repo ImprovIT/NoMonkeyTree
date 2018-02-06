@@ -247,7 +247,7 @@ namespace ITI.NoMonkeyTree.Tests
         [Test]
         public void ast_full_explicit_string_representation_of_simple_operation3_t2()
         {
-            // ( 3 + 5 * ( 4 + 7 ) )
+            // 3 + 5 * ( 4 + 7 )
 
 
 
@@ -263,6 +263,29 @@ namespace ITI.NoMonkeyTree.Tests
             Console.WriteLine(result);
             result.Should().Be("3 + 5 * ( 4 + 7 )");
             
+        }
+
+
+        [Test]
+        public void ast_full_explicit_string_representation_of_simple_operation3_t3()
+        {
+            // 2 + 3 + 5 * ( 4 + 7 + 12 )
+
+
+
+            var expr = Expression.Add(Expression.Constant(2),
+                Expression.Add(Expression.Constant(3),
+                Expression.Multiply(Expression.Constant(5),
+                Expression.Add(Expression.Constant(4), Expression.Add( Expression.Constant(7), Expression.Constant(12)))
+                )));
+
+            var visitor = new Game.VisitorParenthesis3();
+            visitor.Visit(expr);
+            var result = visitor.GetResult();
+
+            Console.WriteLine(result);
+            result.Should().Be("2 + 3 + 5 * ( 4 + 7 + 12 )");
+
         }
 
     }

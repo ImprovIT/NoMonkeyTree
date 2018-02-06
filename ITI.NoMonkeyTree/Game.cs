@@ -22,13 +22,13 @@ namespace ITI.NoMonkeyTree
         /// </summary>
         public static BinaryExpression AstStringOperator()
         {
-            var addStringMethod = typeof(string).GetMethod("Concat", new[] {typeof(string), typeof(string)});
+            var addStringMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
             return Expression.Add(Expression.Constant("toto"), Expression.Constant("tata"), addStringMethod);
         }
 
         public static BinaryExpression AstStringAndDateTime()
         {
-            var addStringMethod = typeof(string).GetMethod("Concat", new[] {typeof(string), typeof(string)});
+            var addStringMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
             return Expression.Add(Expression.Constant("toto"),
                 Expression.Constant((DateTime.UtcNow.Millisecond & 1) == 1 ? "You" : "Me"), addStringMethod);
         }
@@ -104,7 +104,7 @@ namespace ITI.NoMonkeyTree
                 }
 
 
-            var rightNode = this.Visit(node.Right);
+                var rightNode = this.Visit(node.Right);
 
                 _sb.Append(" )");
                 return node;
@@ -180,17 +180,21 @@ namespace ITI.NoMonkeyTree
         public class VisitorParenthesis3 : ExpressionVisitor
         {
             readonly StringBuilder _sb;
+            bool priorOp;
+            bool parenthesisOpenned;
 
             public VisitorParenthesis3()
             {
                 _sb = new StringBuilder();
+                priorOp = true;
+                parenthesisOpenned = false;
             }
 
             public string GetResult() => _sb.ToString();
 
             protected override Expression VisitBinary(BinaryExpression node)
             {
-                bool priorOp;
+
                 //TODO: Remove parenthesis from multiple non prior operations
                 switch (node.NodeType)
                 {
@@ -214,11 +218,19 @@ namespace ITI.NoMonkeyTree
                         break;
                 }
 
-                if (!priorOp)
-                    _sb.Append("( ");
+
+                if (parenthesisOpenned)
+                {
+                    if (node.Left.NodeType == ExpressionType.Add)
+                    {
+                        _sb.Append(" )");
+                        parenthesisOpenned = false;
+                    }
+                }
 
                 var leftNode = this.Visit(node.Left);
 
+              
 
                 switch (node.NodeType)
                 {
@@ -241,12 +253,18 @@ namespace ITI.NoMonkeyTree
                         _sb.Append(" ? ");
                         break;
                 }
+                if (priorOp)
+                {
+                    if (node.Right.NodeType == ExpressionType.Add)
+                    {
+                        parenthesisOpenned = true;
+                        _sb.Append("( ");
+                    }
+                }
+
+                    var rightNode = this.Visit(node.Right);
 
 
-                var rightNode = this.Visit(node.Right);
-
-                if (!priorOp)
-                    _sb.Append(" )");
 
                 return node;
             }
