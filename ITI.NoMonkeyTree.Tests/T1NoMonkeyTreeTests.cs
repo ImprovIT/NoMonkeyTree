@@ -223,22 +223,46 @@ namespace ITI.NoMonkeyTree.Tests
         }
 
         [Test]
-        public void ast_full_explicit_string_representation_of_simple_operation3()
+        public void ast_full_explicit_string_representation_of_simple_operation3_t1()
         {
             // ( 3 + 5 ) * 3 / 4 => ( 3 + 5 ) * 3 ) / 4
 
             var expr = Expression.Divide(
                 Expression.Multiply(
-                    Expression.Add( Expression.Constant( 3 ),
-                    Expression.Constant( 5 ) ),
-                    Expression.Constant( 3 ) ),
-                Expression.Constant( 4 ) );
+                    Expression.Add(Expression.Constant(3),
+                    Expression.Constant(5)),
+                    Expression.Constant(3)),
+                Expression.Constant(4));
+
+
+
             var visitor = new Game.VisitorParenthesis3();
             visitor.Visit( expr );
             var result = visitor.GetResult();
 
             result.Should().Be( "( 3 + 5 ) * 3 / 4" );
             Console.WriteLine( result );
+        }
+
+        [Test]
+        public void ast_full_explicit_string_representation_of_simple_operation3_t2()
+        {
+            // ( 3 + 5 * ( 4 + 7 ) )
+
+
+
+            var expr = Expression.Add(Expression.Constant(3),
+                Expression.Multiply(Expression.Constant(5),
+                Expression.Add(Expression.Constant(4), Expression.Constant(7))
+                ));
+
+            var visitor = new Game.VisitorParenthesis3();
+            visitor.Visit(expr);
+            var result = visitor.GetResult();
+
+            Console.WriteLine(result);
+            result.Should().Be("3 + 5 * ( 4 + 7 )");
+            
         }
 
     }
