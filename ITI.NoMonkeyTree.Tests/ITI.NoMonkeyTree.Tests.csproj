@@ -13,8 +13,8 @@
     <ProjectGuid>{9F1863D5-A50A-4635-A467-310C5B2725B5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ITI.GameOfLife.Tests</RootNamespace>
-    <AssemblyName>ITI.GameOfLife.Tests</AssemblyName>
+    <RootNamespace>ITI.NoMonkeyTree.Tests</RootNamespace>
+    <AssemblyName>ITI.NoMonkeyTree.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>

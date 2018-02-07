@@ -8,8 +8,8 @@
     <ProjectGuid>{FEF0ACCF-A297-4E2B-A03D-33B67809F219}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ITI.GameOfLife</RootNamespace>
-    <AssemblyName>ITI.GameOfLife</AssemblyName>
+    <RootNamespace>ITI.NoMonkeyTree</RootNamespace>
+    <AssemblyName>ITI.NoMonkeyTree</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>

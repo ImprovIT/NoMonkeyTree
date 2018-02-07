@@ -151,6 +151,22 @@ namespace ITI.NoMonkeyTree.Tests
                 .Replace("C2", constValue.ElementAt(1).ToString())
                 .Replace("C3", constValue.ElementAt(2).ToString())
             );
+
+            constValue.Clear();
+
+            Expression expr2 = CreateE2(new Random(), constValue);
+
+            var visitor2 = new VisitorReversePolishNotation();
+            visitor2.Visit(expr2);
+            string result2 = visitor2.GetResult().Trim();
+
+            result2.Should().Be("C1 C2 C3 C4 C5 + + - *"
+                .Replace("C1", constValue.ElementAt(0).ToString())
+                .Replace("C2", constValue.ElementAt(1).ToString())
+                .Replace("C3", constValue.ElementAt(2).ToString())
+                .Replace("C4", constValue.ElementAt(3).ToString())
+                .Replace("C5", constValue.ElementAt(4).ToString())
+            );
         }
 
         public Expression CreateE1(Random r, List<int> constValue)
@@ -165,6 +181,21 @@ namespace ITI.NoMonkeyTree.Tests
 
             var a = Expression.Add(Expression.Constant(const2), Expression.Constant(const3));
             return Expression.Add(Expression.Constant(const1), a);
+
+        }
+
+        public Expression CreateE2(Random r, List<int> constValue)
+        {
+            int const1 = r.Next(Int32.MinValue, Int32.MaxValue);
+            int const2 = r.Next(Int32.MinValue, Int32.MaxValue);
+
+            constValue.Add(const1);
+            constValue.Add(const2);
+
+            Expression createE1 = CreateE1(new Random(), constValue);
+
+            var a = Expression.Subtract(Expression.Constant(const2), createE1);
+            return Expression.Multiply(Expression.Constant(const1), a);
 
         }
 
