@@ -257,5 +257,10 @@ namespace ITI.NoMonkeyTree
                 return node;
             }
         }
+
+        public static Expression AstLoopWithBlock()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

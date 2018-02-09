@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
 
 namespace ITI.NoMonkeyTree.Tests
 {
@@ -294,6 +293,65 @@ namespace ITI.NoMonkeyTree.Tests
             Console.WriteLine(result);
             result.Should().Be("3 + 5 * ( 4 + 7 )");
             
+        }
+
+        public static bool CheckEven(ref int val)
+        {
+            val++;
+            Console.WriteLine("call check : " + val);
+            return (val & 1) != 1;
+        }
+
+        [Test]
+        public void ast_loop_with_block_expression()
+        {
+            int val1 = new Random().Next(0, 10);
+            Console.WriteLine("val1 : " + val1);
+            int val2 = new Random().Next(11, 20);
+            Console.WriteLine("val2 : " + val2);
+
+            Expression<Func<bool>> evenExpr = () => CheckEven(ref val1);
+
+            // Creating a parameter expression.
+            ParameterExpression startValue = Expression.Parameter(typeof(int), "startValue");
+            ParameterExpression endValue = Expression.Parameter(typeof(int), "endValue");
+
+            // Creating an expression to hold a local variable. 
+            ParameterExpression evenResult = Expression.Parameter(typeof(int), "evenResult");
+
+            // Creating a label to jump to from a loop.
+            LabelTarget label = Expression.Label(typeof(int));
+
+            // Creating a method body.
+            BlockExpression block = Expression.Block(
+                new[] {evenResult},
+                Expression.Assign(evenResult, Expression.Constant(0, typeof(int))),
+                Expression.Loop(
+                    Expression.IfThenElse(
+                        Expression.GreaterThanOrEqual(startValue, endValue),
+                        Expression.Break(label, evenResult),
+                        Expression.IfThenElse(
+                            Expression.Invoke(evenExpr),
+                            Expression.Block(
+                                Expression.PostIncrementAssign(startValue),
+                                //Expression.Call(
+                                //    typeof(Console).GetMethod("WriteLine", new Type[] { typeof(int) }),
+                                //    startValue
+                                //),
+                                Expression.PostIncrementAssign(evenResult)
+                            ),
+                            Expression.PostIncrementAssign(startValue)
+                        )                              
+                    ),
+                    label
+                )
+            );
+
+            // Compile and run an expression tree.
+            int result = Expression.Lambda<Func<int, int, int>>(block, startValue, endValue).Compile()(val1, val2);
+            Console.WriteLine("val1 after increment : " + val1);
+            Console.WriteLine(result);
+
         }
 
     }
