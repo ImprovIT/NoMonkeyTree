@@ -219,9 +219,9 @@ namespace ITI.NoMonkeyTree
                 }
 
 
-                if (parenthesisOpenned)
+                if (!priorOp && parenthesisOpenned)
                 {
-                    if (node.Left.NodeType == ExpressionType.Add)
+                    if (node.Left.NodeType == ExpressionType.Constant)
                     {
                         _sb.Append(" )");
                         parenthesisOpenned = false;

@@ -221,6 +221,8 @@ namespace ITI.NoMonkeyTree.Tests
             result.Should().Be( "( ( ( 3 + 5 ) * 3 ) / 4 )" );
             Console.WriteLine( result );
         }
+        // TODO: Merge t1 t2 t3
+
 
         [Test]
         public void ast_full_explicit_string_representation_of_simple_operation3_t1()
@@ -240,8 +242,8 @@ namespace ITI.NoMonkeyTree.Tests
             visitor.Visit( expr );
             var result = visitor.GetResult();
 
-            result.Should().Be( "( 3 + 5 ) * 3 / 4" );
             Console.WriteLine( result );
+            result.Should().Be( "( 3 + 5 ) * 3 / 4" );
         }
 
         [Test]
