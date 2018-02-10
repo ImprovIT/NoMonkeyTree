@@ -12,9 +12,9 @@ namespace ITI.NoMonkeyTree.Tests
     class MyExpressionVisitor : ExpressionVisitor
     {
 
-        protected override Expression VisitBinary( BinaryExpression node )
+        protected override Expression VisitBinary(BinaryExpression node)
         {
-            Console.WriteLine( "Visit Binary" );
+            Console.WriteLine("Visit Binary");
             return node;
         }
     }
@@ -36,13 +36,13 @@ namespace ITI.NoMonkeyTree.Tests
 
             if (ast.Left.NodeType == ExpressionType.Multiply)
             {
-                astMultiply = (BinaryExpression) ast.Left;
-                const1 = (ConstantExpression) ast.Right;
+                astMultiply = (BinaryExpression)ast.Left;
+                const1 = (ConstantExpression)ast.Right;
             }
             else
             {
-                astMultiply = (BinaryExpression) ast.Right;
-                const1 = (ConstantExpression) ast.Left;
+                astMultiply = (BinaryExpression)ast.Right;
+                const1 = (ConstantExpression)ast.Left;
             }
 
             astMultiply.NodeType.Should().Be(ExpressionType.Multiply);
@@ -55,13 +55,13 @@ namespace ITI.NoMonkeyTree.Tests
 
             if (astMultiply.Left.NodeType == ExpressionType.Add)
             {
-                astAddition = (BinaryExpression) astMultiply.Left;
-                const2 = (ConstantExpression) astMultiply.Right;
+                astAddition = (BinaryExpression)astMultiply.Left;
+                const2 = (ConstantExpression)astMultiply.Right;
             }
             else
             {
-                astAddition = (BinaryExpression) astMultiply.Right;
-                const2 = (ConstantExpression) astMultiply.Left;
+                astAddition = (BinaryExpression)astMultiply.Right;
+                const2 = (ConstantExpression)astMultiply.Left;
             }
 
             astAddition.NodeType.Should().Be(ExpressionType.Add);
@@ -71,12 +71,12 @@ namespace ITI.NoMonkeyTree.Tests
             const2.Value.Should().Be(3);
 
 
-            ConstantExpression const3 = (ConstantExpression) astAddition.Left;
-            ConstantExpression const4 = (ConstantExpression) astAddition.Right;
+            ConstantExpression const3 = (ConstantExpression)astAddition.Left;
+            ConstantExpression const4 = (ConstantExpression)astAddition.Right;
             const3.NodeType.Should().Be(ExpressionType.Constant);
             const4.NodeType.Should().Be(ExpressionType.Constant);
 
-            if ((int) const3.Value == 3)
+            if ((int)const3.Value == 3)
             {
                 const4.Value.Should().Be(5);
             }
@@ -100,8 +100,8 @@ namespace ITI.NoMonkeyTree.Tests
         {
             BinaryExpression stringExpr = NoMonkeyTree.AstStringOperator();
 
-            ((ConstantExpression) stringExpr.Left).Value.Should().Be("toto");
-            ((ConstantExpression) stringExpr.Right).Value.Should().Be("tata");
+            ((ConstantExpression)stringExpr.Left).Value.Should().Be("toto");
+            ((ConstantExpression)stringExpr.Right).Value.Should().Be("tata");
 
             Expression.Lambda<Func<string>>(NoMonkeyTree.AstStringOperator()).Compile()().Should().Be("tototata");
         }
@@ -109,13 +109,27 @@ namespace ITI.NoMonkeyTree.Tests
         [Test]
         public void ast_string_and_datetime()
         {
-            Console.WriteLine(Expression.Lambda<Func<string>>(NoMonkeyTree.AstStringAndDateTime()).Compile()());
+            // It may fail even if implementation is correct. I have no better idea. Low CPU can't run it properly.
+
+            BinaryExpression expression;
+
+
+            for (int i = 0; i < 100; i++)
+            {
+                expression = NoMonkeyTree.AstStringAndDateTime();
+                var shouldResult = ("toto" + ((DateTime.UtcNow.Millisecond & 1) == 1 ? "You" : "Me"));
+                expression.Left.NodeType.Should().Be(ExpressionType.Constant);
+                expression.Right.NodeType.Should().Be(ExpressionType.Constant);
+                var result = Expression.Lambda<Func<string>>(expression).Compile()();
+                Console.WriteLine(result);
+                result.Should().Be(shouldResult);
+            }
         }
 
         [Test]
         public void ast_usage_of_func()
         {
-            Expression<Func<int, int, int>> expr = (Expression<Func<int, int, int>>) NoMonkeyTree.AstFunc();
+            Expression<Func<int, int, int>> expr = (Expression<Func<int, int, int>>)NoMonkeyTree.AstFunc();
 
             expr.NodeType.Should().Be(ExpressionType.Lambda);
 
@@ -209,7 +223,7 @@ namespace ITI.NoMonkeyTree.Tests
             reversePolishNotation.Enqueue("*");
 
             Expression<Func<Queue, int>> expression =
-                (Expression<Func<Queue, int>>) NoMonkeyTree.CalculSimpleReversePolishNotation();
+                (Expression<Func<Queue, int>>)NoMonkeyTree.CalculSimpleReversePolishNotation();
             Console.WriteLine(expression.Compile()(reversePolishNotation));
         }
 
@@ -220,16 +234,16 @@ namespace ITI.NoMonkeyTree.Tests
 
             var expr = Expression.Divide(
                 Expression.Multiply(
-                    Expression.Add( Expression.Constant( 3 ),
-                    Expression.Constant( 5 ) ),
-                    Expression.Constant( 3 ) ),
-                Expression.Constant( 4 ) );
+                    Expression.Add(Expression.Constant(3),
+                    Expression.Constant(5)),
+                    Expression.Constant(3)),
+                Expression.Constant(4));
             var visitor = new VisitorParenthesis1();
-            visitor.Visit( expr );
+            visitor.Visit(expr);
             var result = visitor.GetResult();
 
-            result.Should().Be( "( ( ( (3) + (5) ) * (3) ) / (4) )" );
-            Console.WriteLine( result );
+            result.Should().Be("( ( ( (3) + (5) ) * (3) ) / (4) )");
+            Console.WriteLine(result);
         }
 
 
@@ -240,16 +254,16 @@ namespace ITI.NoMonkeyTree.Tests
 
             var expr = Expression.Divide(
                 Expression.Multiply(
-                    Expression.Add( Expression.Constant( 3 ),
-                    Expression.Constant( 5 ) ),
-                    Expression.Constant( 3 ) ),
-                Expression.Constant( 4 ) );
+                    Expression.Add(Expression.Constant(3),
+                    Expression.Constant(5)),
+                    Expression.Constant(3)),
+                Expression.Constant(4));
             var visitor = new VisitorParenthesis2();
-            visitor.Visit( expr );
+            visitor.Visit(expr);
             var result = visitor.GetResult();
 
-            result.Should().Be( "( ( ( 3 + 5 ) * 3 ) / 4 )" );
-            Console.WriteLine( result );
+            result.Should().Be("( ( ( 3 + 5 ) * 3 ) / 4 )");
+            Console.WriteLine(result);
         }
 
         [Test]
@@ -267,15 +281,15 @@ namespace ITI.NoMonkeyTree.Tests
 
 
             var visitor = new VisitorParenthesis3();
-            visitor.Visit( expr );
+            visitor.Visit(expr);
             var result = visitor.GetResult();
 
-            result.Should().Be( "( 3 + 5 ) * 3 / 4" );
-            Console.WriteLine( result );
+            result.Should().Be("( 3 + 5 ) * 3 / 4");
+            Console.WriteLine(result);
         }
 
         //WIP on branch develop
-      //  [Test]
+        //  [Test]
         public void ast_full_explicit_string_representation_of_simple_operation3_t2()
         {
             // ( 3 + 5 * ( 4 + 7 ) )
@@ -293,7 +307,7 @@ namespace ITI.NoMonkeyTree.Tests
 
             Console.WriteLine(result);
             result.Should().Be("3 + 5 * ( 4 + 7 )");
-            
+
         }
 
         public static bool CheckEven(ref int val)
@@ -306,6 +320,7 @@ namespace ITI.NoMonkeyTree.Tests
         [Test]
         public void ast_loop_with_block_expression()
         {
+            /// Create a for loop as : for ( int i = val1 ; i <= val2 ; i++) {}
             int val1 = new Random().Next(0, 10);
             Console.WriteLine("val1 : " + val1);
             int val2 = new Random().Next(11, 20);
@@ -325,7 +340,7 @@ namespace ITI.NoMonkeyTree.Tests
 
             // Creating a method body.
             BlockExpression block = Expression.Block(
-                new[] {evenResult},
+                new[] { evenResult },
                 Expression.Assign(evenResult, Expression.Constant(0, typeof(int))),
                 Expression.Loop(
                     Expression.IfThenElse(
@@ -342,7 +357,7 @@ namespace ITI.NoMonkeyTree.Tests
                                 Expression.PostIncrementAssign(evenResult)
                             ),
                             Expression.PostIncrementAssign(startValue)
-                        )                              
+                        )
                     ),
                     label
                 )
