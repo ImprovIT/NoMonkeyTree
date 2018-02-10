@@ -274,7 +274,8 @@ namespace ITI.NoMonkeyTree.Tests
             Console.WriteLine( result );
         }
 
-        [Test]
+        //WIP on branch develop
+      //  [Test]
         public void ast_full_explicit_string_representation_of_simple_operation3_t2()
         {
             // ( 3 + 5 * ( 4 + 7 ) )
