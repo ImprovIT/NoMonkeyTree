@@ -51,7 +51,10 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game.cs" />
+    <Compile Include="NoMonkeyTree.cs" />
+    <Compile Include="VisitorParenthesis1.cs" />
+    <Compile Include="VisitorParenthesis2.cs" />
+    <Compile Include="VisitorParenthesis3.cs" />
     <Compile Include="VisitorReversePolishNotation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

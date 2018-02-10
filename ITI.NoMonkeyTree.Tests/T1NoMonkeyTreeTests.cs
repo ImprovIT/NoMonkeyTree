@@ -26,7 +26,7 @@ namespace ITI.NoMonkeyTree.Tests
         [Test]
         public void ast_simple_operator_should_works()
         {
-            BinaryExpression ast = Game.AstSimpleOperator();
+            BinaryExpression ast = NoMonkeyTree.AstSimpleOperator();
 
 
             ast.NodeType.Should().Be(ExpressionType.Divide);
@@ -98,24 +98,24 @@ namespace ITI.NoMonkeyTree.Tests
         [Test]
         public void ast_play_with_string()
         {
-            BinaryExpression stringExpr = Game.AstStringOperator();
+            BinaryExpression stringExpr = NoMonkeyTree.AstStringOperator();
 
             ((ConstantExpression) stringExpr.Left).Value.Should().Be("toto");
             ((ConstantExpression) stringExpr.Right).Value.Should().Be("tata");
 
-            Expression.Lambda<Func<string>>(Game.AstStringOperator()).Compile()().Should().Be("tototata");
+            Expression.Lambda<Func<string>>(NoMonkeyTree.AstStringOperator()).Compile()().Should().Be("tototata");
         }
 
         [Test]
         public void ast_string_and_datetime()
         {
-            Console.WriteLine(Expression.Lambda<Func<string>>(Game.AstStringAndDateTime()).Compile()());
+            Console.WriteLine(Expression.Lambda<Func<string>>(NoMonkeyTree.AstStringAndDateTime()).Compile()());
         }
 
         [Test]
         public void ast_usage_of_func()
         {
-            Expression<Func<int, int, int>> expr = (Expression<Func<int, int, int>>) Game.AstFunc();
+            Expression<Func<int, int, int>> expr = (Expression<Func<int, int, int>>) NoMonkeyTree.AstFunc();
 
             expr.NodeType.Should().Be(ExpressionType.Lambda);
 
@@ -209,7 +209,7 @@ namespace ITI.NoMonkeyTree.Tests
             reversePolishNotation.Enqueue("*");
 
             Expression<Func<Queue, int>> expression =
-                (Expression<Func<Queue, int>>) Game.CalculSimpleReversePolishNotation();
+                (Expression<Func<Queue, int>>) NoMonkeyTree.CalculSimpleReversePolishNotation();
             Console.WriteLine(expression.Compile()(reversePolishNotation));
         }
 
@@ -224,7 +224,7 @@ namespace ITI.NoMonkeyTree.Tests
                     Expression.Constant( 5 ) ),
                     Expression.Constant( 3 ) ),
                 Expression.Constant( 4 ) );
-            var visitor = new Game.VisitorParenthesis1();
+            var visitor = new VisitorParenthesis1();
             visitor.Visit( expr );
             var result = visitor.GetResult();
 
@@ -244,7 +244,7 @@ namespace ITI.NoMonkeyTree.Tests
                     Expression.Constant( 5 ) ),
                     Expression.Constant( 3 ) ),
                 Expression.Constant( 4 ) );
-            var visitor = new Game.VisitorParenthesis2();
+            var visitor = new VisitorParenthesis2();
             visitor.Visit( expr );
             var result = visitor.GetResult();
 
@@ -266,7 +266,7 @@ namespace ITI.NoMonkeyTree.Tests
 
 
 
-            var visitor = new Game.VisitorParenthesis3();
+            var visitor = new VisitorParenthesis3();
             visitor.Visit( expr );
             var result = visitor.GetResult();
 
@@ -286,7 +286,7 @@ namespace ITI.NoMonkeyTree.Tests
                 Expression.Add(Expression.Constant(4), Expression.Constant(7))
                 ));
 
-            var visitor = new Game.VisitorParenthesis3();
+            var visitor = new VisitorParenthesis3();
             visitor.Visit(expr);
             var result = visitor.GetResult();
 
