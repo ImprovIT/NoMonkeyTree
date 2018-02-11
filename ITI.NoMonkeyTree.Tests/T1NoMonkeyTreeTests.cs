@@ -1,24 +1,12 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace ITI.NoMonkeyTree.Tests
 {
-
-    class MyExpressionVisitor : ExpressionVisitor
-    {
-
-        protected override Expression VisitBinary(BinaryExpression node)
-        {
-            Console.WriteLine("Visit Binary");
-            return node;
-        }
-    }
-
 
     [TestFixture]
     public class T1NoMonkeyTreeTests
@@ -143,6 +131,17 @@ namespace ITI.NoMonkeyTree.Tests
         }
 
         [Test]
+        public void ast_expression_that_call_our_own_method()
+        {
+            Random rand = new Random();
+            int c1 = rand.Next(Int32.MinValue, Int32.MaxValue);
+            int c2 = rand.Next(Int32.MinValue, Int32.MaxValue);
+            Expression expr = NoMonkeyTree.AstCallCustomFunction(c1, c2);
+            var func = Expression.Lambda<Func<int>>(expr).Compile();
+            func.Invoke().Should().Be(c1 - c2);
+        }
+
+        [Test]
         public void ast_reverse_polish_notation_principle()
         {
             List<int> constValue = new List<int>();
@@ -151,13 +150,6 @@ namespace ITI.NoMonkeyTree.Tests
             var visitor = new VisitorReversePolishNotation();
             visitor.Visit(expr);
             string result = visitor.GetResult().Trim();
-
-            //Console.WriteLine(result);
-            //Console.WriteLine("C1 C2 C3 + +"
-            //    .Replace("C1", constValue.ElementAt(0).ToString())
-            //    .Replace("C2", constValue.ElementAt(1).ToString())
-            //    .Replace("C3", constValue.ElementAt(2).ToString())
-            //);
 
             result.Should().Be("C1 C2 C3 + +"
                 .Replace("C1", constValue.ElementAt(0).ToString())
@@ -210,21 +202,6 @@ namespace ITI.NoMonkeyTree.Tests
             var a = Expression.Subtract(Expression.Constant(const2), createE1);
             return Expression.Multiply(Expression.Constant(const1), a);
 
-        }
-
-        [Test]
-        public void ast_reverse_polish_notation_simple_calcul()
-        {
-            Queue reversePolishNotation = new Queue();
-            reversePolishNotation.Enqueue(1);
-            reversePolishNotation.Enqueue(2);
-            reversePolishNotation.Enqueue(3);
-            reversePolishNotation.Enqueue("+");
-            reversePolishNotation.Enqueue("*");
-
-            Expression<Func<Queue, int>> expression =
-                (Expression<Func<Queue, int>>)NoMonkeyTree.CalculSimpleReversePolishNotation();
-            Console.WriteLine(expression.Compile()(reversePolishNotation));
         }
 
         [Test]
@@ -294,8 +271,6 @@ namespace ITI.NoMonkeyTree.Tests
         {
             // ( 3 + 5 * ( 4 + 7 ) )
 
-
-
             var expr = Expression.Add(Expression.Constant(3),
                 Expression.Multiply(Expression.Constant(5),
                 Expression.Add(Expression.Constant(4), Expression.Constant(7))
@@ -310,63 +285,39 @@ namespace ITI.NoMonkeyTree.Tests
 
         }
 
-        public static bool CheckEven(ref int val)
-        {
-            val++;
-            Console.WriteLine("call check : " + val);
-            return (val & 1) != 1;
-        }
-
         [Test]
         public void ast_loop_with_block_expression()
         {
-            /// Create a for loop as : for ( int i = val1 ; i <= val2 ; i++) {}
-            int val1 = new Random().Next(0, 10);
-            Console.WriteLine("val1 : " + val1);
-            int val2 = new Random().Next(11, 20);
-            Console.WriteLine("val2 : " + val2);
 
-            Expression<Func<bool>> evenExpr = () => CheckEven(ref val1);
-
+            int val1 = new Random().Next(0, 1000);
+            int val2;
+            do
+            {
+                val2 = new Random().Next(0, 5000);
+            } while (val1 > val2);
+ 
             // Creating a parameter expression.
             ParameterExpression startValue = Expression.Parameter(typeof(int), "startValue");
             ParameterExpression endValue = Expression.Parameter(typeof(int), "endValue");
 
-            // Creating an expression to hold a local variable. 
-            ParameterExpression evenResult = Expression.Parameter(typeof(int), "evenResult");
-
-            // Creating a label to jump to from a loop.
-            LabelTarget label = Expression.Label(typeof(int));
-
-            // Creating a method body.
-            BlockExpression block = Expression.Block(
-                new[] { evenResult },
-                Expression.Assign(evenResult, Expression.Constant(0, typeof(int))),
-                Expression.Loop(
-                    Expression.IfThenElse(
-                        Expression.GreaterThanOrEqual(startValue, endValue),
-                        Expression.Break(label, evenResult),
-                        Expression.IfThenElse(
-                            Expression.Invoke(evenExpr),
-                            Expression.Block(
-                                Expression.PostIncrementAssign(startValue),
-                                //Expression.Call(
-                                //    typeof(Console).GetMethod("WriteLine", new Type[] { typeof(int) }),
-                                //    startValue
-                                //),
-                                Expression.PostIncrementAssign(evenResult)
-                            ),
-                            Expression.PostIncrementAssign(startValue)
-                        )
-                    ),
-                    label
-                )
-            );
-
             // Compile and run an expression tree.
+            BlockExpression block = (BlockExpression)NoMonkeyTree.AstLoopWithBlock(val1, startValue, endValue);
+
+            ExpressionType.Loop.Should().Be(block.Result.NodeType);
+
             int result = Expression.Lambda<Func<int, int, int>>(block, startValue, endValue).Compile()(val1, val2);
-            Console.WriteLine("val1 after increment : " + val1);
-            Console.WriteLine(result);
+
+            int evenResult = 0;
+
+            for (int i = ++val1; i <= val2; i++)
+            {
+                if ((i & 1) != 1)
+                {
+                    evenResult++;
+                }
+            }
+
+            evenResult.Should().Be(result);
 
         }
 

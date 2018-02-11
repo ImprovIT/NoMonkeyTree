@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace ITI.NoMonkeyTree
 {
@@ -40,22 +38,56 @@ namespace ITI.NoMonkeyTree
             return expression;
         }
 
-        public static Expression CalculSimpleReversePolishNotation()
+        public static Expression AstCallCustomFunction(int c1, int c2)
         {
-            Expression<Func<Queue, int>> expression = (reversePolishNotation) => TestCalcul(reversePolishNotation);
-            return expression;
+            var exprC1 = Expression.Constant(c1);
+            var exprC2 = Expression.Constant(c2);
+            return Expression.Call(typeof(NoMonkeyTree).GetMethod("Substract"), exprC1, exprC2);
         }
 
-        public static int TestCalcul(Queue reversePolishNotation)
+        public static int Substract(int c1, int c2) => c1 - c2;
+
+        public static Expression AstLoopWithBlock(int val1, ParameterExpression startValue, ParameterExpression endValue)
         {
-            Console.WriteLine(reversePolishNotation);
-            return reversePolishNotation.Count;
+            //throw new System.NotImplementedException();
+
+            Expression<Func<bool>> evenExpr = () => CheckEven(ref val1);
+
+            // Creating an expression to hold a local variable. 
+            ParameterExpression evenResult = Expression.Parameter(typeof(int), "evenResult");
+
+            // Creating a label to jump to from a loop.
+            LabelTarget label = Expression.Label(typeof(int));
+
+            // Creating a method body.
+            BlockExpression block = Expression.Block(
+                new[] { evenResult },
+                Expression.Assign(evenResult, Expression.Constant(0, typeof(int))),
+                Expression.Loop(
+                    Expression.IfThenElse(
+                        Expression.GreaterThanOrEqual(startValue, endValue),
+                        Expression.Break(label, evenResult),
+                        Expression.IfThenElse(
+                            Expression.Invoke(evenExpr),
+                            Expression.Block(
+                                Expression.PostIncrementAssign(startValue),
+                                Expression.PostIncrementAssign(evenResult)
+                            ),
+                            Expression.PostIncrementAssign(startValue)
+                        )
+                    ),
+                    label
+                )
+            );
+
+            return block;
         }
 
-
-        public static Expression AstLoopWithBlock()
+        public static bool CheckEven(ref int val)
         {
-            throw new System.NotImplementedException();
+            val++;
+            return (val & 1) != 1;
         }
+
     }
 }
