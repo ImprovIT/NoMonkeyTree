@@ -10,53 +10,21 @@ namespace ITI.NoMonkeyTree
     /// </summary>
     public class VisitorParenthesis1 : ExpressionVisitor
     {
-        readonly StringBuilder _sb;
         public VisitorParenthesis1()
         {
-            _sb = new StringBuilder();
+            throw new System.NotImplementedException();
         }
 
-        public string GetResult() => _sb.ToString();
+        public string GetResult() => throw new System.NotImplementedException();
 
         protected override Expression VisitBinary(BinaryExpression node)
         {
-            _sb.Append("( ");
-            var leftNode = this.Visit(node.Left);
-
-
-            switch (node.NodeType)
-            {
-                case ExpressionType.Add:
-                    _sb.Append(" + ");
-                    break;
-                case ExpressionType.Subtract:
-                    _sb.Append(" - ");
-                    break;
-                case ExpressionType.Multiply:
-                    _sb.Append(" * ");
-                    break;
-                case ExpressionType.Divide:
-                    _sb.Append(" / ");
-                    break;
-                case ExpressionType.Modulo:
-                    _sb.Append(" % ");
-                    break;
-                default:
-                    _sb.Append(" ? ");
-                    break;
-            }
-
-
-            var rightNode = this.Visit(node.Right);
-
-            _sb.Append(" )");
-            return node;
+            throw new System.NotImplementedException();
         }
 
         protected override Expression VisitConstant(ConstantExpression node)
         {
-            _sb.Append("(" + node.Value + ")");
-            return node;
+            throw new System.NotImplementedException();
         }
     }
 

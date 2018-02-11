@@ -48,8 +48,6 @@ namespace ITI.NoMonkeyTree
 
         public static Expression AstLoopWithBlock(int val1, ParameterExpression startValue, ParameterExpression endValue)
         {
-            //throw new System.NotImplementedException();
-
             Expression<Func<bool>> evenExpr = () => CheckEven(ref val1);
 
             // Creating an expression to hold a local variable. 
