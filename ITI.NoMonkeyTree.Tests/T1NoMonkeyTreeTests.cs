@@ -84,14 +84,14 @@ namespace ITI.NoMonkeyTree.Tests
         }
 
         [Test]
-        public void ast_play_with_string()
+        public void ast_play_with_string_should_return_concat_of_two_strings()
         {
             BinaryExpression stringExpr = NoMonkeyTree.AstStringOperator();
 
             ((ConstantExpression)stringExpr.Left).Value.Should().Be("toto");
             ((ConstantExpression)stringExpr.Right).Value.Should().Be("tata");
 
-            Expression.Lambda<Func<string>>(NoMonkeyTree.AstStringOperator()).Compile()().Should().Be("tototata");
+            Expression.Lambda<Func<string>>(stringExpr).Compile()().Should().Be("tototata");
         }
 
         [Test]
@@ -115,9 +115,9 @@ namespace ITI.NoMonkeyTree.Tests
         }
 
         [Test]
-        public void ast_usage_of_func()
+        public void ast_usage_of_func_should_return_result_multiplication_of_two_numbers()
         {
-            Expression<Func<int, int, int>> expr = (Expression<Func<int, int, int>>)NoMonkeyTree.AstFunc();
+            Expression<Func<int, int, int>> expr = (Expression<Func<int, int, int>>)NoMonkeyTree.AstFuncMultilplication();
 
             expr.NodeType.Should().Be(ExpressionType.Lambda);
 
@@ -131,7 +131,7 @@ namespace ITI.NoMonkeyTree.Tests
         }
 
         [Test]
-        public void ast_expression_that_call_our_own_method()
+        public void ast_expression_that_call_our_own_method_substract()
         {
             Random rand = new Random();
             int c1 = rand.Next(Int32.MinValue, Int32.MaxValue);
@@ -286,7 +286,7 @@ namespace ITI.NoMonkeyTree.Tests
         }
 
         [Test]
-        public void ast_loop_with_block_expression()
+        public void ast_loop_with_block_expression_return_even_occurence_between_start_value_and_end_value()
         {
 
             int val1 = new Random().Next(0, 1000);
@@ -307,17 +307,17 @@ namespace ITI.NoMonkeyTree.Tests
 
             int result = Expression.Lambda<Func<int, int, int>>(block, startValue, endValue).Compile()(val1, val2);
 
-            int evenResult = 0;
+            int evenOccurence = 0;
 
             for (int i = ++val1; i <= val2; i++)
             {
                 if ((i & 1) != 1)
                 {
-                    evenResult++;
+                    evenOccurence++;
                 }
             }
 
-            evenResult.Should().Be(result);
+            evenOccurence.Should().Be(result);
 
         }
 

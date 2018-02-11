@@ -32,7 +32,7 @@ namespace ITI.NoMonkeyTree
             // Visitor ? Need to know Expression.Constant(whatishere)
         }
 
-        public static Expression AstFunc()
+        public static Expression AstFuncMultilplication()
         {
             Expression<Func<int, int, int>> expression = (x, y) => x * y;
             return expression;
