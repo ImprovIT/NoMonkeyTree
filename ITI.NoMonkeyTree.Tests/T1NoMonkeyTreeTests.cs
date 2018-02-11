@@ -34,7 +34,6 @@ namespace ITI.NoMonkeyTree.Tests
             }
 
             astMultiply.NodeType.Should().Be(ExpressionType.Multiply);
-            //const1.NodeType.Should().Be( ExpressionType.Constant );
             const1.Value.Should().Be(4);
 
 
@@ -53,7 +52,6 @@ namespace ITI.NoMonkeyTree.Tests
             }
 
             astAddition.NodeType.Should().Be(ExpressionType.Add);
-            //const2.NodeType.Should().Be( ExpressionType.Constant );
 
 
             const2.Value.Should().Be(3);
@@ -95,21 +93,18 @@ namespace ITI.NoMonkeyTree.Tests
         }
 
         [Test]
-        public void ast_string_and_datetime()
+        public void ast_string_and_datetime_loop_should_return_toto_and_Me_for_even_date_else_You()
         {
-            // It may fail even if implementation is correct. I have no better idea. Low CPU can't run it properly.
-
-            BinaryExpression expression;
-
-
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 500; i++)
             {
-                expression = NoMonkeyTree.AstStringAndDateTime();
-                var shouldResult = ("toto" + ((DateTime.UtcNow.Millisecond & 1) == 1 ? "You" : "Me"));
+                var date = DateTime.UtcNow.Millisecond;
+                var expression = NoMonkeyTree.AstStringAndDateTime(date);
+                var shouldResult = ("toto" + ((date & 1) == 1 ? "You" : "Me"));
+
                 expression.Left.NodeType.Should().Be(ExpressionType.Constant);
                 expression.Right.NodeType.Should().Be(ExpressionType.Constant);
+
                 var result = Expression.Lambda<Func<string>>(expression).Compile()();
-                Console.WriteLine(result);
                 result.Should().Be(shouldResult);
             }
         }

@@ -24,12 +24,11 @@ namespace ITI.NoMonkeyTree
             return Expression.Add(Expression.Constant("toto"), Expression.Constant("tata"), addStringMethod);
         }
 
-        public static BinaryExpression AstStringAndDateTime()
+        public static BinaryExpression AstStringAndDateTime(int date)
         {
             var addStringMethod = typeof(string).GetMethod("Concat", new[] {typeof(string), typeof(string)});
             return Expression.Add(Expression.Constant("toto"),
-                Expression.Constant((DateTime.UtcNow.Millisecond & 1) == 1 ? "You" : "Me"), addStringMethod);
-            // Visitor ? Need to know Expression.Constant(whatishere)
+                Expression.Constant((date & 1) == 1 ? "You" : "Me"), addStringMethod);
         }
 
         public static Expression AstFuncMultilplication()
