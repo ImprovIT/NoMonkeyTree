@@ -8,8 +8,8 @@
     <ProjectGuid>{FE7A1B7D-589E-4113-909F-2CABD3573379}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ITI.GameOfLife</RootNamespace>
-    <AssemblyName>ITI.GameOfLife</AssemblyName>
+    <RootNamespace>ITI.NoMonkeyTree</RootNamespace>
+    <AssemblyName>ITI.NoMonkeyTree</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -51,12 +51,12 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game.cs" />
+    <Compile Include="NoMonkeyTree.cs" />
+    <Compile Include="VisitorParenthesis1.cs" />
+    <Compile Include="VisitorParenthesis2.cs" />
+    <Compile Include="VisitorReversePolishNotation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy . $(SolutionDir)..\ITI.GameOfLife\$(OutDir) /e /y</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
