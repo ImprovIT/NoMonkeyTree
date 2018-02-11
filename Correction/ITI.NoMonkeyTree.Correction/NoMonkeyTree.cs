@@ -37,7 +37,7 @@ namespace ITI.NoMonkeyTree
             return expression;
         }
 
-        public static Expression AstCallCustomFunction(int c1, int c2)
+        public static Expression AstCallCustomFunctionSubstract(int c1, int c2)
         {
             var exprC1 = Expression.Constant(c1);
             var exprC2 = Expression.Constant(c2);
@@ -80,7 +80,7 @@ namespace ITI.NoMonkeyTree
             return block;
         }
 
-        public static bool CheckEven(ref int val)
+        internal static bool CheckEven(ref int val)
         {
             val++;
             return (val & 1) != 1;

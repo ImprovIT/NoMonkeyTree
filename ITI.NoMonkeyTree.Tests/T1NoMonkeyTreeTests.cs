@@ -131,7 +131,7 @@ namespace ITI.NoMonkeyTree.Tests
             Random rand = new Random();
             int c1 = rand.Next(Int32.MinValue, Int32.MaxValue);
             int c2 = rand.Next(Int32.MinValue, Int32.MaxValue);
-            Expression expr = NoMonkeyTree.AstCallCustomFunction(c1, c2);
+            Expression expr = NoMonkeyTree.AstCallCustomFunctionSubstract(c1, c2);
             var func = Expression.Lambda<Func<int>>(expr).Compile();
             func.Invoke().Should().Be(c1 - c2);
         }

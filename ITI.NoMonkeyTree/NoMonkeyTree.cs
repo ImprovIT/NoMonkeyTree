@@ -31,7 +31,7 @@ namespace ITI.NoMonkeyTree
             throw new System.NotImplementedException();
         }
 
-        public static Expression AstCallCustomFunction(int c1, int c2)
+        public static Expression AstCallCustomFunctionSubstract(int c1, int c2)
         {
             throw new System.NotImplementedException();
         }
@@ -43,7 +43,7 @@ namespace ITI.NoMonkeyTree
             throw new System.NotImplementedException();
         }
 
-        public static bool CheckEven(ref int val)
+        internal static bool CheckEven(ref int val)
         {
             throw new System.NotImplementedException();
         }
