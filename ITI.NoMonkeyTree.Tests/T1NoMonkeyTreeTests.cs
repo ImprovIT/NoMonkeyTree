@@ -220,7 +220,6 @@ namespace ITI.NoMonkeyTree.Tests
             var result = visitor.GetResult();
 
             result.Should().Be("( ( ( (3) + (5) ) * (3) ) / (4) )");
-            Console.WriteLine(result);
         }
 
 
@@ -240,7 +239,6 @@ namespace ITI.NoMonkeyTree.Tests
             var result = visitor.GetResult();
 
             result.Should().Be("( ( ( 3 + 5 ) * 3 ) / 4 )");
-            Console.WriteLine(result);
         }
 
      
