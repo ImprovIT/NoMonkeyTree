@@ -11,8 +11,13 @@ namespace ITI.NoMonkeyTree.Tests
     [TestFixture]
     public class T1NoMonkeyTreeTests
     {
+        /// <summary>
+        /// Create an expression tree that respect the syntax : ( 3 + 5 ) * 3 / 4
+        /// The expression have to chain addition, multiplication and division.
+        /// </summary>
         [Test]
-        public void ast_simple_operator_should_works()
+        public void ast_create_simple_expression_with_basic_operators_and_return_expression_that_do_the_calcul()
+
         {
             BinaryExpression ast = NoMonkeyTree.AstSimpleOperator();
 
@@ -82,7 +87,7 @@ namespace ITI.NoMonkeyTree.Tests
         }
 
         [Test]
-        public void ast_play_with_string_should_return_concat_of_two_strings()
+        public void ast_play_with_string_should_return_expression_concat_of_two_strings()
         {
             BinaryExpression stringExpr = NoMonkeyTree.AstStringOperator();
 
@@ -92,6 +97,9 @@ namespace ITI.NoMonkeyTree.Tests
             Expression.Lambda<Func<string>>(stringExpr).Compile()().Should().Be("tototata");
         }
 
+        /// <summary>
+        /// Check parity of date and display totoYou or totoMe.
+        /// </summary>
         [Test]
         public void ast_string_and_datetime_loop_should_return_toto_and_Me_for_even_date_else_You()
         {
@@ -126,7 +134,7 @@ namespace ITI.NoMonkeyTree.Tests
         }
 
         [Test]
-        public void ast_expression_that_call_our_own_method_substract()
+        public void ast_return_expression_that_call_our_own_method_substract()
         {
             Random rand = new Random();
             int c1 = rand.Next(Int32.MinValue, Int32.MaxValue);
@@ -136,6 +144,9 @@ namespace ITI.NoMonkeyTree.Tests
             func.Invoke().Should().Be(c1 - c2);
         }
 
+        /// <summary>
+        /// Check doc for more information
+        /// </summary>
         [Test]
         public void ast_reverse_polish_notation_principle()
         {
@@ -199,8 +210,14 @@ namespace ITI.NoMonkeyTree.Tests
 
         }
 
+        /// <summary>
+        /// GetResult should return  “( ( ( (3) + (5) ) * (3) ) / (4) )”.
+        /// It's the representation of an expression tree with full parenthesis.
+        /// Use the visitor pattern on the given expression to create the string.
+        /// There's no priority in operator.Even const are in parenthesis.
+        /// </summary>
         [Test]
-        public void ast_full_explicit_string_representation_of_simple_operation1()
+        public void ast_should_display_non_optimised_at_all_explicit_to_string_representation_of_the_whole_expression_tree_from_given_expr()
         {
             // ( 3 + 5 ) * 3 / 4 =>  ( ( ( (3) + (5) ) * (3) ) / (4) )
 
@@ -217,9 +234,12 @@ namespace ITI.NoMonkeyTree.Tests
             result.Should().Be("( ( ( (3) + (5) ) * (3) ) / (4) )");
         }
 
-
+        /// <summary>
+        /// The same as the precedent TU but with little optimisation.
+        /// Result should be “( ( ( 3 + 5 ) * 3 ) / 4 )”. There's no parenthesis between a const.
+        /// </summary>
         [Test]
-        public void ast_full_explicit_string_representation_of_simple_operation2()
+        public void ast_should_display_non_optimised_but_smarter_explicit_to_string_representation_of_the_whole_expression_tree_from_given_expr()
         {
             // ( 3 + 5 ) * 3 / 4 =>  ( ( ( 3 + 5 ) * 3 ) / 4 )
 
@@ -238,8 +258,13 @@ namespace ITI.NoMonkeyTree.Tests
 
      
 
+        /// <summary>
+        /// Use an Expression Block to loop between a start to end value.
+        /// When you loop you should count even occurences.
+        /// Should return an Expression Block that display the number of even occurences when looping.
+        /// </summary>
         [Test]
-        public void ast_loop_with_block_expression_return_even_occurence_between_start_value_and_end_value()
+        public void ast_loop_with_block_expression_return_block_expression_that_calcul_even_occurence_between_start_value_and_end_value()
         {
 
             int val1 = new Random().Next(0, 1000);
