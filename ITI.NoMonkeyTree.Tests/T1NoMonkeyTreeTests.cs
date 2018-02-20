@@ -21,66 +21,34 @@ namespace ITI.NoMonkeyTree.Tests
         {
             BinaryExpression ast = NoMonkeyTree.AstSimpleOperator();
 
-
             ast.NodeType.Should().Be(ExpressionType.Divide);
 
-            BinaryExpression astMultiply;
-            ConstantExpression const1;
 
-            if (ast.Left.NodeType == ExpressionType.Multiply)
-            {
-                astMultiply = (BinaryExpression)ast.Left;
-                const1 = (ConstantExpression)ast.Right;
-            }
-            else
-            {
-                astMultiply = (BinaryExpression)ast.Right;
-                const1 = (ConstantExpression)ast.Left;
-            }
+            BinaryExpression astMultiply = (BinaryExpression)ast.Left;
+            ConstantExpression const1 = (ConstantExpression)ast.Right;
 
             astMultiply.NodeType.Should().Be(ExpressionType.Multiply);
             const1.Value.Should().Be(4);
 
 
-            BinaryExpression astAddition;
-            ConstantExpression const2;
-
-            if (astMultiply.Left.NodeType == ExpressionType.Add)
-            {
-                astAddition = (BinaryExpression)astMultiply.Left;
-                const2 = (ConstantExpression)astMultiply.Right;
-            }
-            else
-            {
-                astAddition = (BinaryExpression)astMultiply.Right;
-                const2 = (ConstantExpression)astMultiply.Left;
-            }
+            BinaryExpression astAddition = (BinaryExpression)astMultiply.Left;
+            ConstantExpression const2 = (ConstantExpression)astMultiply.Right;
 
             astAddition.NodeType.Should().Be(ExpressionType.Add);
-
-
             const2.Value.Should().Be(3);
 
 
             ConstantExpression const3 = (ConstantExpression)astAddition.Left;
             ConstantExpression const4 = (ConstantExpression)astAddition.Right;
-            const3.NodeType.Should().Be(ExpressionType.Constant);
-            const4.NodeType.Should().Be(ExpressionType.Constant);
 
-            if ((int)const3.Value == 3)
-            {
-                const4.Value.Should().Be(5);
-            }
-            else
-            {
-                const4.Value.Should().Be(3);
-                const3.Value.Should().Be(5);
-            }
+            const4.Value.Should().Be(3);
+            const3.Value.Should().Be(5);
 
+
+            ast.ToString().Should().Be("(3+5)*3/4");
 
 
             var result = Expression.Lambda<Func<int>>(ast).Compile()();
-
             result.Should().Be(6);
 
 
@@ -256,7 +224,7 @@ namespace ITI.NoMonkeyTree.Tests
             result.Should().Be("( ( ( 3 + 5 ) * 3 ) / 4 )");
         }
 
-     
+
 
         /// <summary>
         /// Use an Expression Block to loop between a start to end value.
@@ -273,7 +241,7 @@ namespace ITI.NoMonkeyTree.Tests
             {
                 val2 = new Random().Next(0, 5000);
             } while (val1 > val2);
- 
+
             // Creating a parameter expression.
             ParameterExpression startValue = Expression.Parameter(typeof(int), "startValue");
             ParameterExpression endValue = Expression.Parameter(typeof(int), "endValue");

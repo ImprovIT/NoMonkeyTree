@@ -11,7 +11,7 @@ namespace ITI.NoMonkeyTree
         public static BinaryExpression AstSimpleOperator()
         {
             var a = Expression.Add(Expression.Constant(3), Expression.Constant(5));
-            var b = Expression.Multiply(Expression.Constant(3), a);
+            var b = Expression.Multiply(a, Expression.Constant(3));
             return Expression.Divide(b, Expression.Constant(4));
         }
 
