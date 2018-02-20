@@ -12,11 +12,11 @@ namespace ITI.NoMonkeyTree.Tests
     public class T1NoMonkeyTreeTests
     {
         /// <summary>
-        /// Create an expression tree that respect the syntax : (((3 + 5) * 3) / 4)
+        /// Create an expression tree that respect the following operation : (3 + 5) * 3 / 4
         /// The expression have to chain addition, multiplication and division.
         /// </summary>
         [Test]
-        public void ast_create_simple_expression_with_basic_operators_and_return_expression_that_do_the_calcul()
+        public void ast_create_simple_expression_with_basic_operators_and_return_linqexpression_that_do_the_calcul()
 
         {
             BinaryExpression ast = NoMonkeyTree.AstSimpleOperator();
@@ -54,6 +54,9 @@ namespace ITI.NoMonkeyTree.Tests
 
         }
 
+        /// <summary>
+        /// Keeping the idea of the first test, from two strings, add them using a concat method 
+        /// </summary>
         [Test]
         public void ast_play_with_string_should_return_expression_concat_of_two_strings()
         {
@@ -66,7 +69,7 @@ namespace ITI.NoMonkeyTree.Tests
         }
 
         /// <summary>
-        /// Check parity of date and display totoYou or totoMe.
+        /// According to the parity of the current date, display totoYou or totoMe.
         /// </summary>
         [Test]
         public void ast_string_and_datetime_loop_should_return_toto_and_Me_for_even_date_else_You()
@@ -85,6 +88,9 @@ namespace ITI.NoMonkeyTree.Tests
             }
         }
 
+        /// <summary>
+        /// You have to create an Expression that is a function that is able to multiply 2 numbers.
+        /// </summary>
         [Test]
         public void ast_usage_of_func_should_return_result_multiplication_of_two_numbers()
         {
@@ -101,6 +107,9 @@ namespace ITI.NoMonkeyTree.Tests
             expr.Compile()(10, 5).Should().Be(50);
         }
 
+        /// <summary>
+        /// Implement and call our own method Substract from NoMonkeyTree
+        /// </summary>
         [Test]
         public void ast_return_expression_that_call_our_own_method_substract()
         {
@@ -180,12 +189,12 @@ namespace ITI.NoMonkeyTree.Tests
 
         /// <summary>
         /// GetResult should return  “( ( ( (3) + (5) ) * (3) ) / (4) )”.
-        /// It's the representation of an expression tree with full parenthesis.
-        /// Use the visitor pattern on the given expression to create the string.
-        /// There's no priority in operator.Even const are in parenthesis.
+        /// It's a representation of an expression tree with full parenthesis.
+        /// Use the visitor pattern to explore the given expression in order to create the string.
+        /// There's no priority in operator. Even const are surround by parenthesis.
         /// </summary>
         [Test]
-        public void ast_should_display_non_optimised_at_all_explicit_to_string_representation_of_the_whole_expression_tree_from_given_expr()
+        public void ast_should_display_non_optimised_at_all_explicit_tostring_representation_of_the_whole_expression_tree_from_given_expression()
         {
             // ( 3 + 5 ) * 3 / 4 =>  ( ( ( (3) + (5) ) * (3) ) / (4) )
 
@@ -203,11 +212,11 @@ namespace ITI.NoMonkeyTree.Tests
         }
 
         /// <summary>
-        /// The same as the precedent TU but with little optimisation.
-        /// Result should be “( ( ( 3 + 5 ) * 3 ) / 4 )”. There's no parenthesis between a const.
+        /// The same as the precedent test but with little optimisation.
+        /// Result should be “( ( ( 3 + 5 ) * 3 ) / 4 )”. There's no parenthesis surrounding a const.
         /// </summary>
         [Test]
-        public void ast_should_display_non_optimised_but_smarter_explicit_to_string_representation_of_the_whole_expression_tree_from_given_expr()
+        public void ast_should_display_non_optimised_but_smarter_explicit_to_string_representation_of_the_whole_expression_tree_from_given_expression()
         {
             // ( 3 + 5 ) * 3 / 4 =>  ( ( ( 3 + 5 ) * 3 ) / 4 )
 
@@ -227,7 +236,7 @@ namespace ITI.NoMonkeyTree.Tests
 
 
         /// <summary>
-        /// Use an Expression Block to loop between a start to end value.
+        /// Use an Expression Block to loop from a start to a end value.
         /// When you loop you should count even occurences.
         /// Should return an Expression Block that display the number of even occurences when looping.
         /// </summary>
