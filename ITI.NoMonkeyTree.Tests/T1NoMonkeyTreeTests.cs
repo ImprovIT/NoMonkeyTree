@@ -12,7 +12,7 @@ namespace ITI.NoMonkeyTree.Tests
     public class T1NoMonkeyTreeTests
     {
         /// <summary>
-        /// Create an expression tree that respect the syntax : ( 3 + 5 ) * 3 / 4
+        /// Create an expression tree that respect the syntax : (((3 + 5) * 3) / 4)
         /// The expression have to chain addition, multiplication and division.
         /// </summary>
         [Test]
@@ -41,11 +41,11 @@ namespace ITI.NoMonkeyTree.Tests
             ConstantExpression const3 = (ConstantExpression)astAddition.Left;
             ConstantExpression const4 = (ConstantExpression)astAddition.Right;
 
-            const4.Value.Should().Be(3);
-            const3.Value.Should().Be(5);
+            const3.Value.Should().Be(3);
+            const4.Value.Should().Be(5);
 
 
-            ast.ToString().Should().Be("(3+5)*3/4");
+            ast.ToString().Should().Be("(((3 + 5) * 3) / 4)");
 
 
             var result = Expression.Lambda<Func<int>>(ast).Compile()();

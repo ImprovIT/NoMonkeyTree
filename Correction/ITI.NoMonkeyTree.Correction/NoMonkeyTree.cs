@@ -6,7 +6,7 @@ namespace ITI.NoMonkeyTree
     public static class NoMonkeyTree
     {
         /// <summary>
-        /// ( 3 + 5 ) * 3 / 4
+        /// (((3 + 5) * 3) / 4)
         /// </summary>
         public static BinaryExpression AstSimpleOperator()
         {
